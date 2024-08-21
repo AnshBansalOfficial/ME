@@ -41,6 +41,7 @@
       padding-bottom: 20px; /* Adjust padding as needed */
       margin: 0 auto; /* Center the hero section */
       border-top: 4px solid #c95437;
+      margin-bottom: 30px;
     }
   
     .upload-project-section {
@@ -108,12 +109,12 @@
     }
 
     /* Specific style for textarea */
-#project-description {
-  width: 100%; /* Adjust width as needed */
-  height: 40px; /* Reduce the height from 100px to 80px */
-  padding: 10px; /* Ensure consistent padding */
-  box-sizing: border-box; /* Include padding in the element's total width and height */
-}
+    #project-description {
+    width: 100%; /* Adjust as needed for full width */
+    height: 120px; /* Increase the height to make the text box longer */
+    padding: 10px; /* Ensure consistent padding */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+  }
 
 
 
@@ -143,7 +144,6 @@
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
           <li><a class="nav-link scrollto" href="/">Home</a></li>
-          <li><a class="nav-link scrollto" href="/trigers">Dashboard</a></li>
           <li class="dropdown">
             <a href="/login">
               <span>Welcome {{ current_user.email.split('@')[0] }}</span>
@@ -154,8 +154,8 @@
               <li><a href="/logout">Logout</a></li>
             </ul>
           </li>
-          <li><a class="nav-link scrollto" href="/trigers">My Groups</a></li>
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          <li><a class="nav-link scrollto" href="/trigers">My Group</a></li>
+          <li><a class="nav-link scrollto" href="/studentprojectportal">Back ></a></li>
         </ul>
       </nav>
     </div>
@@ -179,30 +179,6 @@
                 <label class="field-label" for="project-description">Project Description</label>
                 <textarea id="project-description" name="project_description" class="field-input" required></textarea>
               </div>
-
-              <div class="form-field">
-                <label class="field-label" for="project-domain">Project Domain</label>
-                <select id="project-domain" name="project_domain" class="field-input" required>
-                  <option value="" disabled selected>Select a domain</option>
-                  <option value="ai_ml">Artificial Intelligence</option>
-                  <option value="ai_ml">Machine Learning</option>
-                  <option value="blockchain">Blockchain</option>
-                  <option value="robotics">Robotics</option>
-                  <option value="electronics">Electronics</option>
-                </select>
-              </div>
-
-              <div class="form-field">
-                <label class="field-label" for="project-supervisor">Project Supervisor</label>
-                <select id="project-supervisor" name="project_supervisor" class="field-input" required>
-                  <option value="" disabled selected>Select a Supervisor</option>
-                  <option value="ai_ml">Dr. Nidhi Kalra</option>
-                  <option value="ai_ml">Dr. Jatin Bedi</option>
-                  <option value="blockchain">Dr. Jasmeet Singh</option>
-                  <option value="robotics">Dr. Sachin Kansal</option>
-                  <option value="electronics">Dr. Prashant S. Rana</option>
-                </select>
-              </div>    
 
               <div class="form-field">
                 <label class="field-label" for="project-file">Upload File</label>

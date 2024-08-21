@@ -109,14 +109,10 @@
             </ul>
           </li>        
 
-          <li><a class="nav-link scrollto" href="/studentgroupregistration">My Groups</a></li>
+          <li><a class="nav-link scrollto" href="/studentgroupregistration">My Group</a></li>
 
-          <button class="appointment-btn scrollto" onclick="window.location.href='/uploadproject'"><span class= "d-none d-md-inline">UPLOAD PROJECT </span></button>
+          <button class="appointment-btn scrollto" onclick="window.location.href='/studentprojectportal'"><span class= "d-none d-md-inline">UPLOAD PROJECT </span></button>
 
-
-
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-         
           
         </ul>
       </nav>
@@ -179,13 +175,13 @@
                 <ion-icon name="book-outline"></ion-icon>Aug-Sep
               </h5>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                <div class="progress-bar" role="progressbar" style="width: 100%; border: none;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
               </div>
               <p class="mt-2">100% Complete</p>
-              <a href="/submitproject/aug-sep" class="btn btn-primary" style="margin-bottom: 10px;">Submit Project</a>
-              <a href="/viewgrades/aug-sep" class="btn btn-secondary mt-2">View Grades</a>
+              <a href="/uploadproject" class="btn btn-primary" style="margin-bottom: 10px; background-color: #801b02; border:none;">Submit Project</a>
+              <a href="/viewgrades/aug-sep" class="btn btn-secondary mt-2" style="background-color: rgb(44, 44, 249); border: none;">View Grades</a>
             </div>
-            <ion-icon name="lock-closed-outline" class="lock-icon"></ion-icon> <!-- Hidden lock icon -->
+            <ion-icon name="lock-closed-outline" class="lock-icon" size="small" style="position: absolute; top: 10px; right: 10px; color: gray;"></ion-icon> <!-- Hidden lock icon -->
           </div>
         </div>
 
@@ -193,7 +189,7 @@
         <div class="col-md-3">
           <div class="card locked text-center">
             <div class="card-body">
-              <h5 class="card-title">
+              <h5 class="card-title" >
                 <ion-icon name="book-outline"></ion-icon>Oct-Nov
               </h5>
               <div class="progress">

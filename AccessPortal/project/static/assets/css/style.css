@@ -1608,6 +1608,18 @@ section {
 
 /* General Card Styles */
 
+.progress {
+  height: 20px;
+  border: 2px solid rgb(144, 142, 142);  /* Adds a black border to the progress bar */
+  border-radius: 5px;
+}
+
+.progress-bar {
+  background-color: #c33512; 
+}
+
+
+
 .card-title {
   display: flex;
   align-items: center;   /* Vertically center the icon and text */
@@ -1616,7 +1628,7 @@ section {
 }
 
 .card-title ion-icon {
-  margin-right: 8px; /* Adjust space between the icon and text */
+  margin-right: 12px; /* Adjust space between the icon and text */
   font-size: 20px;   /* Size of the icon */
 }
 
@@ -1657,3 +1669,14 @@ section {
 .card.locked .lock-icon {
   display: block;
 }
+
+.card-body h5 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.card-body .btn-secondary {
+  margin-bottom: 10px;
+}
+
+
