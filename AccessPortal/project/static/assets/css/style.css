@@ -560,6 +560,7 @@ section {
   text-align: center;
   padding-bottom: 30px;
 }
+
 .section-title h2 {
   font-size: 32px;
   font-weight: bold;
@@ -568,6 +569,7 @@ section {
   padding-bottom: 20px;
   position: relative;
 }
+
 .section-title h2::after {
   content: "";
   position: absolute;
@@ -1602,4 +1604,56 @@ section {
   padding-top: 10px;
   text-align: center;
   font-size: 13px;
+}
+
+/* General Card Styles */
+
+.card-title {
+  display: flex;
+  align-items: center;   /* Vertically center the icon and text */
+  justify-content: center;  /* Horizontally center the icon and text */
+  text-align: center;    /* Center the text within its container */
+}
+
+.card-title ion-icon {
+  margin-right: 8px; /* Adjust space between the icon and text */
+  font-size: 20px;   /* Size of the icon */
+}
+
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative; /* Allows positioning of the lock icon */
+  opacity: 0.95;
+  transition: opacity 0.3s ease;
+}
+
+/* Style for activated card */
+.card.active {
+  opacity: 1;
+}
+
+/* Style for locked card */
+.card.locked {
+  background-color: #f0f0f0; /* Light grey background */
+  color: #888; /* Grey text */
+  cursor: not-allowed; /* Change cursor to indicate unclickable */
+}
+
+/* Lock icon styles */
+.card .lock-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #888; /* Grey color for the lock icon */
+  display: none; /* Initially hidden */
+}
+
+/* Show lock icon for locked cards */
+.card.locked .lock-icon {
+  display: block;
 }

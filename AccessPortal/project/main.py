@@ -17,8 +17,8 @@ app=Flask(__name__)
 app.secret_key="Ansh"
 
 
-with open('config.json','r') as c:
-    params=json.load(c)["params"]
+# with open('config.json','r') as c:
+#     params=json.load(c)["params"]
 
 
 
@@ -183,6 +183,11 @@ def supervisorlogin():
 @app.route('/uploadproject')
 def uploadproject():
     return render_template("uploadproject.html")
+
+
+@app.route('/studentprojectportal')
+def studentprojectportal():
+    return render_template("studentprojectportal.html")
 
 
     
