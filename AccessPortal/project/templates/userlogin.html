@@ -1,0 +1,61 @@
+{% extends 'baselogin.html' %}
+
+{% block title %}User Login {% endblock title %}
+
+{% block form %}
+
+<div class="student-login">
+
+<h1>
+    Student Login 
+</h1>
+
+<div class="row">
+
+<div class="col-md-4"></div>
+
+    <div class="col-md-4">
+
+        <form action="" method="post">
+        
+        {% include "message.html" %}
+        
+
+        <div class="form-group">
+
+                <input type="text" class="form-control mt-2" placeholder="Enter the Roll Number" name="rollno" required style="text-align: center;">
+                <span class="login-icon">
+                    <ion-icon name="people-outline"></ion-icon>
+                </span>
+        </div>
+        
+        <div class="form-group">
+                <input type="number" class="form-control mt-2" placeholder="Enter the Password" name="password" required style="text-align: center;">
+                <span class="login-icon2">
+                    <ion-icon name="lock-open-outline"></ion-icon>
+                </span>
+        </div>
+
+        <br>
+        <button type="submit" class="btn" style="background-color: #9e4a35; color: white;">Login</button>
+
+    
+        </form>
+
+        <br>
+        <a href="" class="forgot-password" style="font-size: medium;">Forgot Password?</a>
+        <br>
+
+        <br>
+        <a style="font-size: medium; color:black;">New Student?&nbsp;</a><a type="text-success" href="/signup" style="color: #713222; text-decoration: underline; font-size: medium;">Click Here To Sign Up</a>
+    </div>
+
+
+
+<div class="col-md-4"></div>
+
+</div>
+
+</div>
+
+{% endblock form %}

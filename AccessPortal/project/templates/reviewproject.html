@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Review Projects</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="static/assets/img/favicon.png" rel="icon">
+  <link href="static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="static/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Template Main CSS File -->
+  <link href="static/assets/css/style.css" rel="stylesheet">
+
+  <style>
+    #hero {
+      padding: 20px 0;
+      background-size: cover;
+      width: 100%; /* Ensure it takes full width */
+    }
+
+    #hero .container {
+      width: 60%; /* Reduce width of the hero container */
+      max-width: 800px; /* Set a maximum width for better control */
+      text-align: center;
+      background: rgba(255, 255, 255, 0.85);
+      padding-top: 20px; /* Adjust padding as needed */
+      padding-bottom: 20px; /* Adjust padding as needed */
+      margin: 0 auto; /* Center the hero section */
+      border-top: 4px solid #c95437;
+    }
+
+    .table-container {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-title {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-field {
+      margin-bottom: 20px;
+      width: 100%; /* Ensure form field takes full width of its container */
+    }
+
+    .field-label {
+      display: block;
+      font-size: 1rem; /* Adjust font size */
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 10px; /* Adjust padding */
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.9rem; /* Adjust font size */
+      display: inline-block;
+    }
+
+    .form-submit {
+      background-color: #801b02;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 15px; /* Adjust padding */
+      cursor: pointer;
+      font-size: 0.9rem; /* Adjust font size */
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+
+    .form-submit:hover {
+      background-color: #600a01;
+    }
+
+    /* Table Styles */
+    .project-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .project-table th, .project-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    .project-table th {
+      background-color: #f2f2f2;
+    }
+
+    .project-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .project-table a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .project-table a:hover {
+      text-decoration: underline;
+    }
+
+    #domain-filter {
+  margin-bottom: 30px; /* Adjust the margin value as needed */
+}
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ======= Top Bar ======= -->
+  <div id="topbar" class="d-flex align-items-center fixed-top">
+    <div class="container d-flex align-items-center justify-content-center justify-content-md-between">
+      <div class="align-items-center d-none d-md-flex">
+        <i class="bi bi-clock"></i> Monday - Saturday, 8AM to 6PM
+      </div>
+      <div class="d-flex align-items-center">
+        <i class="bi bi-phone"></i> Call us now +91 96500 73883
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center">
+      <a href="/" class="logo me-auto"><img src="../static/assets/img/tietlogo.png" alt=""></a>
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a class="nav-link scrollto" href="/">Home</a></li>
+          <li><a class="nav-link scrollto" href="/trigers">Dashboard</a></li>
+          <li class="dropdown">
+            <a href="/login">
+              <span>Welcome</span>
+              <i class="bi bi-chevron-down"></i>
+            </a>
+            <ul>
+              <li><a href="/slotbooking">Profile</a></li>
+              <li><a href="/logout">Logout</a></li>
+            </ul>
+          </li>
+          <li><a class="nav-link scrollto" href="/trigers">My Groups</a></li>
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero">
+    <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
+      <div class="carousel-inner" role="listbox">
+        <!-- Slide 1 -->
+        <div class="carousel-item active" style="background-image: url(../static/assets/img/thaparbuilding3.jpg)">
+          <div class="container upload-project-section">
+            <h1 class="upload-project-title">Review Projects</h1>
+            
+            <div class="dropdown">
+              <label for="domain-filter">Filter by Domain:</label>
+              <select id="domain-filter" class="form-select">
+
+                <option value="all" selected>All Domains</option>
+                <option value="ai_ml">Artificial Intelligence</option>
+                <option value="blockchain">Blockchain</option>
+                <option value="robotics">Robotics</option>
+                <option value="electronics">Electronics</option>
+              </select>
+            </div>
+            
+            <table class="project-table">
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Project Domain</th>
+                  <th>Project Name</th>
+                  <th>Project Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Artificial Intelligence</td>
+                  <td>AI-Based Image Recognition</td>
+                  <td><a href="/project-details/1">View Details</a></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Machine Learning</td>
+                  <td>Predictive Analytics for Stock Market</td>
+                  <td><a href="/project-details/2">View Details</a></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Blockchain</td>
+                  <td>Secure Voting System</td>
+                  <td><a href="/project-details/3">View Details</a></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Robotics</td>
+                  <td>Autonomous Drone Navigation</td>
+                  <td><a href="/project-details/4">View Details</a></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Electronics</td>
+                  <td>Smart Home Automation System</td>
+                  <td><a href="/project-details/5">View Details</a></td>
+                </tr>
+              </tbody>
+            </table>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section><!-- End Hero Section -->
+
+  <main id="main">
+    <!-- Main content here -->
+  </main>
+
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Thapar University</span></strong>. All Rights Reserved
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../static/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="../static/assets/vendor/aos/aos.js"></script>
+  <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../static/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../static/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../static/assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template
+ Main JS File -->
+  <script src="../static/assets/js/main.js"></script>
+
+</body>
+
+</html>

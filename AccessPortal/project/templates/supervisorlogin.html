@@ -1,0 +1,53 @@
+{% extends 'baselogin.html' %}
+{% block title %} Supervisor  Login{% endblock title %}
+{% block form %}
+
+<div class="supervisor-login">
+
+<h1>Supervisor Login </h1>
+
+<div class="row">
+<div class="col-md-4"></div>
+
+<div class="col-md-4">
+
+
+<form action="/supervisorlogin" method="post">
+
+{% include "message.html" %}
+
+<div class="form-group">
+<input type="email" class="form-control mt-2" placeholder="Enter Email ID" name="email" required style="text-align: center;">
+<span class="login-icon6">
+        <ion-icon name="mail-outline"></ion-icon>
+    </span>
+</div>
+
+
+<div class="form-group">
+<input type="password" class="form-control mt-2" placeholder="Enter Password" name="password" required style="text-align: center;">
+<span class="login-icon7">
+        <ion-icon name="lock-open-outline"></ion-icon>
+    </span>
+</div>
+<br>
+<button type="submit" class="btn btn-info" style="background-color: #9e4a35; color: white; border:none;"> Login</button>
+
+</form>
+
+        <br>
+        <a href="" class="forgot-password2" style="font-size: medium;">Forgot Password?</a>
+        <br>
+
+<br>
+<a style="font-size: medium; color:black;">New Supervisor?&nbsp;</a><a type="text-success" href="/supervisorsignup" style="color: #713222; text-decoration: underline; font-size: medium;">Click Here To Sign Up</a>
+
+</div>
+
+
+<div class="col-md-4"></div>
+
+</div>
+
+</div>
+{% endblock form %}
