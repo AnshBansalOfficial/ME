@@ -1607,18 +1607,17 @@ section {
 }
 
 /* General Card Styles */
-
-.progress {
-  height: 20px;
-  border: 2px solid rgb(144, 142, 142);  /* Adds a black border to the progress bar */
+.card .progress {
+  height: 25px;
+  border: 1px solid rgb(144, 142, 142);  /* Adds a border to the progress bar */
   border-radius: 5px;
+  margin-top: 30px; /* Increase space between progress bar and title */
 }
 
 .progress-bar {
-  background-color: #c33512; 
+  background-color: #801b02; 
+  border: none;
 }
-
-
 
 .card-title {
   display: flex;
@@ -1628,10 +1627,9 @@ section {
 }
 
 .card-title ion-icon {
-  margin-right: 12px; /* Adjust space between the icon and text */
+  margin-right: 12px; /* Space between the icon and text */
   font-size: 20px;   /* Size of the icon */
 }
-
 
 .card {
   display: flex;
@@ -1640,6 +1638,7 @@ section {
   justify-content: center;
   position: relative; /* Allows positioning of the lock icon */
   opacity: 0.95;
+  border: 0.1px solid #cdcccc; /* Darker border color */
   transition: opacity 0.3s ease;
 }
 
@@ -1679,4 +1678,25 @@ section {
   margin-bottom: 10px;
 }
 
+/* Style for submit button */
+.card .btn-submit {
+  background-color: #007bff; /* Default color */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition */
+}
 
+/* Hover effect for the submit button */
+.card .btn-submit:hover {
+  opacity: 0.8; /* Darker shade for hover */
+}
+
+/* Styles for the submit button in the locked card */
+.card.locked .btn-submit {
+  background-color: #6c757d; /* Color for locked card */
+  cursor: not-allowed;
+}

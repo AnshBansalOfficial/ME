@@ -1,289 +1,192 @@
-from flask import Flask, json,redirect,render_template,flash,request
-from flask.globals import request, session
-from flask.helpers import url_for
+from flask import Flask, redirect, render_template, flash, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
-from werkzeug.security import generate_password_hash,check_password_hash
+from flask_login import UserMixin, login_required, logout_user, login_user, LoginManager, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
-from flask_login import login_required,logout_user,login_user,login_manager,LoginManager,current_user
+app = Flask(__name__)
+app.secret_key = "Ansh"
 
-# from flask_mail import Mail
-import json
+# Database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/accessportal'
+db = SQLAlchemy(app)
 
+# Login manager configuration
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 
-# mydatabase connection
-local_server=True
-app=Flask(__name__)
-app.secret_key="Ansh"
+# Define models
+class Test(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
 
+class Student(UserMixin, db.Model):
+    rollno = db.Column(db.String(50), primary_key=True)
+    email = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(50))  # Store password in plain text if required
+    
+    def get_id(self):
+        return str(self.rollno)
 
-# with open('config.json','r') as c:
-#     params=json.load(c)["params"]
+class Supervisor(UserMixin, db.Model):
+    sid = db.Column(db.String(50), primary_key=True)
+    email = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(50))  # Store password in plain text if required
+    
+    def get_id(self):
+        return str(self.sid)
 
-
-
-# app.config.update(
-#     MAIL_SERVER='smtp.gmail.com',
-#     MAIL_PORT='465',
-#     MAIL_USE_SSL=True,
-#     MAIL_USERNAME='gmail account',
-#     MAIL_PASSWORD='gmail account password'
-# )
-# mail = Mail(app)
-
-
-
-# this is for getting the unique user access
-login_manager=LoginManager(app)
-login_manager.login_view='login'
-
-# app.config['SQLALCHEMY_DATABASE_URI']='mysql://username:password@localhost/databsename'
-app.config['SQLALCHEMY_DATABASE_URI']='mysql://root:@localhost/accessportal'
-db=SQLAlchemy(app)
-
-
-
+# Load user
 @login_manager.user_loader
 def load_user(user_id):
-    return Student.query.get(int(user_id))
+    user = Student.query.get(int(user_id))
+    if not user:
+        user = Supervisor.query.get(int(user_id))
+    return user
 
-
-class Test(db.Model):
-    id=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String(50))
-
-
-class Student(UserMixin,db.Model):
-    rollno=db.Column(db.String(50),primary_key=True)
-    email=db.Column(db.String(50),unique=True)
-    password=db.Column(db.String(50),unique=True)
-    def get_id(self):
-            return str(self.rollno);
-
-
-class Supervisor(UserMixin,db.Model):
-    sid=db.Column(db.String(50),primary_key=True)
-    email=db.Column(db.String(50), unique= True)
-    password=db.Column(db.String(50))
-
-    def get_id(self):
-            return str(self.sid);
-
-class StudentGroup(UserMixin, db.Model):
-    __tablename__ = 'studentgroup'
-    groupid = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    roll1 = db.Column(db.String(50), unique=True, nullable=False)
-    roll2 = db.Column(db.String(50), unique=True, nullable=False)
-    roll3 = db.Column(db.String(50), unique=True, nullable=False)
-    roll4 = db.Column(db.String(50), unique=True, nullable=False)
-
-    def get_id(self):
-        return str(self.groupid)
-
-@app.before_request
-def before_request():
-    if current_user.is_authenticated:
-        if hasattr(current_user, 'sid'):  # Supervisors
-            if request.endpoint in ['login', 'supervisorlogin']:
-                return redirect(url_for('index'))  # Redirect to home/dashboard
-        elif hasattr(current_user, 'rollno'):  # Students
-            if request.endpoint in ['supervisorlogin']:
-                return redirect(url_for('index'))  # Redirect to home/dashboard
-
-
-
+# Routes
 @app.route("/")
 def home():
     return render_template("index.html")
 
-@app.route('/signup',methods=['POST','GET'])
+@app.route('/signup', methods=['POST', 'GET'])
 def signup():
-    if request.method=="POST":
-        rollno=request.form.get('rollno')
-        email=request.form.get('email')
-        password=request.form.get('password')
-        # print(srfid,email,dob)
-        #encpassword=generate_password_hash(dob)
-        user=Student.query.filter_by(rollno=rollno).first()
-        emailUser=Student.query.filter_by(email=email).first()
+    if request.method == "POST":
+        rollno = request.form.get('rollno')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        # Check if rollno or email is already in use
+        user = Student.query.filter_by(rollno=rollno).first()
+        emailUser = Student.query.filter_by(email=email).first()
         if user or emailUser:
-            flash("Email or srif is already taken","warning")
+            flash("Email or Roll Number is already taken", "warning")
             return render_template("usersignup.html")
-        # new_user=db.engine.execute(f"INSERT INTO `user` (`srfid`,`email`,`dob`) VALUES ('{srfid}','{email}','{dob}') ")
-        new_user=Student(rollno=rollno,email=email,password=password)
+        
+        new_user = Student(rollno=rollno, email=email, password=password)  # Store plain password
         db.session.add(new_user)
         db.session.commit()
-                
-        flash("SignUp Success - Please Login","success")
+        flash("SignUp Success - Please Login", "success")
         return render_template("userlogin.html")
-
     return render_template("usersignup.html")
 
-
-@app.route('/login',methods=['POST','GET'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-    if request.method=="POST":
-        rollno=request.form.get('rollno')
-        password=request.form.get('password')
-        user=Student.query.filter_by(rollno=rollno).first()
-        if user and user.password==password:
-            login_user(user)
-            flash("Login Success","info")
+    if request.method == "POST":
+        rollno = request.form.get('rollno')
+        password = request.form.get('password')
+        
+        # Validate user credentials
+        user = Student.query.filter_by(rollno=rollno).first()
+        if user and user.password == password:  # Compare plain password
+            login_user(user, remember=True)
+            flash("Login Success", "info")
             return render_template("index.html")
         else:
-            flash("Invalid Credentials","danger")
+            flash("Invalid Credentials", "danger")
             return render_template("userlogin.html")
-
-
     return render_template("userlogin.html")
 
-
-@app.route('/supervisorsignup',methods=['POST','GET'])
+@app.route('/supervisorsignup', methods=['POST', 'GET'])
 def supervisorsignup():
-    if request.method=="POST":
-        sid=request.form.get('sid')
-        email=request.form.get('email')
-        password=request.form.get('password')
-        # print(srfid,email,dob)
-        #encpassword=generate_password_hash(dob)
-        user=Supervisor.query.filter_by(sid=sid).first()
-        emailUser=Supervisor.query.filter_by(email=email).first()
-        if user or emailUser:
-            flash("Email is already taken","warning")
+    if request.method == "POST":
+        sid = request.form.get('sid')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        # Check if email is already in use
+        emailUser = Student.query.filter_by(email=email).first() or Supervisor.query.filter_by(email=email).first()
+        if emailUser:
+            flash("Email is already taken", "warning")
             return render_template("supervisorsignup.html")
-        # new_user=db.engine.execute(f"INSERT INTO `user` (`srfid`,`email`,`dob`) VALUES ('{srfid}','{email}','{dob}') ")
-        new_user=Supervisor(sid=sid,email=email,password=password)
+        
+        new_user = Supervisor(sid=sid, email=email, password=password)  # Store plain password
         db.session.add(new_user)
         db.session.commit()
-                
-        flash("SignUp Success - Please Login","success")
+        flash("SignUp Success - Please Login", "success")
         return render_template("supervisorlogin.html")
-
     return render_template("supervisorsignup.html")
 
-
-@app.route('/supervisorlogin',methods=['POST','GET'])
+@app.route('/supervisorlogin', methods=['POST', 'GET'])
 def supervisorlogin():
-    if request.method=="POST":
-        email=request.form.get('email')
-        password=request.form.get('password')
-        user=Supervisor.query.filter_by(email=email).first()
-        #if user and check_password_hash(user.password,password):
-        if user and user.password==password:
-            login_user(user)
-            flash("Login Success","info")
+    if request.method == "POST":
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        # Validate supervisor credentials
+        user = Supervisor.query.filter_by(email=email).first()
+        if user and user.password == password:  # Compare plain password
+            login_user(user, remember=True)
+            flash("Login Success", "info")
             return render_template("index.html")
         else:
-            flash("Invalid Credentials","danger")
+            flash("Invalid Credentials", "danger")
             return render_template("supervisorlogin.html")
-
-
     return render_template("supervisorlogin.html")
 
-@app.route('/uploadproject')
-def uploadproject():
-    return render_template("uploadproject.html")
+@app.route('/student_home')
+@login_required
+def student_home():
+    return render_template("student_home.html")
 
-
-@app.route('/studentprojectportal')
-def studentprojectportal():
-    return render_template("studentprojectportal.html")
-
-
-    
+@app.route('/supervisor_home')
+@login_required
+def supervisor_home():
+    return render_template("supervisor_home.html")
 
 @app.route('/reviewproject')
+@login_required
 def reviewproject():
-    return render_template("reviewproject.html")
-
+    return render_template("gradeproject.html")
 
 @app.route('/logout')
 @login_required
 def logout():
-    if hasattr(current_user, 'sid'):  # Supervisors
-        logout_user()
-        flash("Logout Successful", "warning")
-        return redirect(url_for('supervisorlogin'))
-    elif hasattr(current_user, 'rollno'):  # Students
-        logout_user()
-        flash("Logout Successful", "warning")
-        return redirect(url_for('login'))
-
+    logout_user()
+    flash("Logout Successful", "warning")
+    return redirect(url_for('login'))
 
 @app.route('/supervisorlogout')
 @login_required
 def supervisorlogout():
-    
-    import debugpy
-    debugpy.listen(("0.0.0.0", 5678))  # Listening on port 5678
-    print("Waiting for debugger...")
-    debugpy.wait_for_client()
-    debugpy.breakpoint()  # Start debugging here
-
-
     logout_user()
-    flash("Logout SuccessFul","warning")
+    flash("Logout SuccessFul", "warning")
     return redirect(url_for('supervisorlogin'))
 
-
-@app.route('/studentgroupregistration', methods=['POST', 'GET'])
-@login_required
-def studentgroupreg():
-    if request.method == "POST":
-        roll1 = request.form.get('roll1')
-        roll2 = request.form.get('roll2')
-        roll3 = request.form.get('roll3')
-        roll4 = request.form.get('roll4')
-
-        # Ensure the current user’s roll number is included in the group
-        current_user_rollno = current_user.rollno
-        if current_user_rollno not in [roll1, roll2, roll3, roll4]:
-            flash("Your roll number must be included in the group registration", "warning")
-            return render_template("studentgroupreg.html")
-
-        # Check if any of the roll numbers is already taken
-        user1 = StudentGroup.query.filter_by(roll1=roll1).first()
-        user2 = StudentGroup.query.filter_by(roll2=roll2).first()
-        user3 = StudentGroup.query.filter_by(roll3=roll3).first()
-        user4 = StudentGroup.query.filter_by(roll4=roll4).first()
-
-        if user1 or user2 or user3 or user4:
-            flash("One of the roll numbers is already taken", "warning")
-            return render_template("studentgroupreg.html")
-
-        # Create a new student group with the provided roll numbers
-        new_group = StudentGroup(roll1=roll1, roll2=roll2, roll3=roll3, roll4=roll4)
-        db.session.add(new_group)
-        db.session.commit()
-
-        flash("Group Registration Success", "success")
-
-        # Fetch the newly created group details
-        group = StudentGroup.query.filter_by(roll1=roll1, roll2=roll2, roll3=roll3, roll4=roll4).first()
-
-        return render_template("studentgroupreg.html", group=group)
-
-    return render_template("studentgroupreg.html")
-
+@app.route('/studentprojectportal')
+def projectportal():
     
-# testing wheather db is connected or not  
-@app.route("/test")
-def test():
-    try:
-        a=Test.query.all()
-        print(a)
-        return f'MY DATABASE IS CONNECTED'
-    except Exception as e:
-        print(e)
-        return f'MY DATABASE IS NOT CONNECTED {e}'
+    return render_template("studentprojectportal.html")
 
-# @app.route("/logoutadmin")
-# def logoutadmin():
-#     session.pop('user')
-#     flash("You are logout admin", "primary")
+@app.route('/uploadproject')
+def uploadproject():
+    
+    return render_template("uploadproject.html")
 
-#     return redirect('/admin')
 
+@app.route('/changepassword', methods=['POST', 'GET'])
+@login_required
+def change_password():
+    if request.method == "POST":
+        old_password = request.form.get('old_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        # Access the current user
+        user = current_user
+        
+        # Check if the old password matches the current one in the database
+        if user and user.password == old_password:
+            if new_password == confirm_password:  # Check if new password and confirm match
+                user.password = new_password  # Store the new password directly
+                db.session.commit()
+                flash("Password Changed Successfully", "success")
+                return render_template("index.html")
+            else:
+                flash("New passwords do not match", "danger")
+        else:
+            flash("Old password is incorrect", "danger")
+    
+    return render_template("change_password.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

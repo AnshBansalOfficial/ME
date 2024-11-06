@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Review Projects</title>
+  <title>Review Project</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -18,114 +18,17 @@
 
   <!-- Vendor CSS Files -->
   <link href="static/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  
+  <link href="static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
   <!-- Template Main CSS File -->
   <link href="static/assets/css/style.css" rel="stylesheet">
 
-  <style>
-    #hero {
-      padding: 20px 0;
-      background-size: cover;
-      width: 100%; /* Ensure it takes full width */
-    }
-
-    #hero .container {
-      width: 60%; /* Reduce width of the hero container */
-      max-width: 800px; /* Set a maximum width for better control */
-      text-align: center;
-      background: rgba(255, 255, 255, 0.85);
-      padding-top: 20px; /* Adjust padding as needed */
-      padding-bottom: 20px; /* Adjust padding as needed */
-      margin: 0 auto; /* Center the hero section */
-      border-top: 4px solid #c95437;
-    }
-
-    .table-container {
-      margin-top: 20px;
-      padding: 20px;
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .table-title {
-      font-size: 2rem;
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    .form-field {
-      margin-bottom: 20px;
-      width: 100%; /* Ensure form field takes full width of its container */
-    }
-
-    .field-label {
-      display: block;
-      font-size: 1rem; /* Adjust font size */
-      margin-bottom: 8px;
-      color: #333;
-    }
-
-    .field-input {
-      width: 100%;
-      padding: 10px; /* Adjust padding */
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 0.9rem; /* Adjust font size */
-      display: inline-block;
-    }
-
-    .form-submit {
-      background-color: #801b02;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      padding: 15px; /* Adjust padding */
-      cursor: pointer;
-      font-size: 0.9rem; /* Adjust font size */
-      width: 100%;
-      transition: background-color 0.3s;
-    }
-
-    .form-submit:hover {
-      background-color: #600a01;
-    }
-
-    /* Table Styles */
-    .project-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .project-table th, .project-table td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-
-    .project-table th {
-      background-color: #f2f2f2;
-    }
-
-    .project-table tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    .project-table a {
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    .project-table a:hover {
-      text-decoration: underline;
-    }
-
-    #domain-filter {
-  margin-bottom: 30px; /* Adjust the margin value as needed */
-}
-
-  </style>
 
 </head>
 
@@ -143,109 +46,224 @@
     </div>
   </div>
 
-  <!-- ======= Header ======= -->
+  {% if current_user.is_authenticated and current_user.sid %}
+
+
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
-      <a href="/" class="logo me-auto"><img src="../static/assets/img/tietlogo.png" alt=""></a>
+
+      <a href="/" class="logo me-auto"><img  src="../static/assets/img/tietlogo.png" alt=""></a>
+
+
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto" href="/">Home</a></li>
-          <li><a class="nav-link scrollto" href="/trigers">Dashboard</a></li>
+          <li><a class="nav-link scrollto " href="/">Home</a></li>
+
+        <li class="dropdown">
+          <a href="/login">
+            <span>Welcome {{ current_user.email.split('@')[0] }}</span> 
+            <i class="bi bi-chevron-down"></i>
+          </a>
+          <ul>
+            <li><a href="/slotbooking">Profile</a></li>
+            <li><a href="/supervisorlogout">Logout</a></li>
+          </ul>
+        </li>        
+
+        <li><a class="nav-link scrollto" href="/trigers">Assignments</a></li>
+
+        <button class="appointment-btn scrollto"  onclick="window.location.href='/reviewproject'"><span class="d-none d-md-inline">REVIEW PROJECTS </span></button>
+
+        <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+       
+        
+      </ul>
+    </nav>
+    <!-- .navbar -->
+  </div>
+</header><!-- End Header -->
+
+
+
+    {% elif current_user.is_authenticated and current_user.rollno %}
+
+
+    <header id="header" class="fixed-top">
+      <div class="container d-flex align-items-center">
+  
+        <a href="/" class="logo me-auto"><img  src="../static/assets/img/tietlogo.png" alt=""></a>
+
+  
+        <nav id="navbar" class="navbar order-last order-lg-0">
+          <ul>
+            <li><a class="nav-link scrollto " href="/">Home</a></li>
+
           <li class="dropdown">
             <a href="/login">
-              <span>Welcome</span>
+              <span>Welcome {{ current_user.email.split('@')[0] }}</span> 
               <i class="bi bi-chevron-down"></i>
             </a>
             <ul>
               <li><a href="/slotbooking">Profile</a></li>
               <li><a href="/logout">Logout</a></li>
             </ul>
-          </li>
-          <li><a class="nav-link scrollto" href="/trigers">My Groups</a></li>
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          </li>        
+
+          <li><a class="nav-link scrollto" href="/studentmygroup">My Group</a></li>
+
+          <button class="appointment-btn scrollto" onclick="window.location.href='/studentprojectportal'"><span class= "d-none d-md-inline">UPLOAD PROJECT </span></button>
+
+          
         </ul>
       </nav>
+
     </div>
   </header><!-- End Header -->
 
   <!-- ======= Hero Section ======= -->
-  <section id="hero">
-    <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
-      <div class="carousel-inner" role="listbox">
-        <!-- Slide 1 -->
-        <div class="carousel-item active" style="background-image: url(../static/assets/img/thaparbuilding3.jpg)">
-          <div class="container upload-project-section">
-            <h1 class="upload-project-title">Review Projects</h1>
-            
-            <div class="dropdown">
-              <label for="domain-filter">Filter by Domain:</label>
-              <select id="domain-filter" class="form-select">
 
-                <option value="all" selected>All Domains</option>
-                <option value="ai_ml">Artificial Intelligence</option>
-                <option value="blockchain">Blockchain</option>
-                <option value="robotics">Robotics</option>
-                <option value="electronics">Electronics</option>
-              </select>
+{% else %}
+
+
+          <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center">
+
+      <a href="/" class="logo me-auto"><img  src="../static/assets/img/tietlogo.png" alt=""></a>
+
+
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a class="nav-link scrollto " href="/">Home</a></li>
+
+          <li><a class="nav-link scrollto" href="/pdetails">Details</a></li>
+          <li><a class="nav-link scrollto" href="/trigers">Operations</a></li>
+
+          <li class="dropdown"><a href="/login"><span>Sign In</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="/login">Student</a></li>   
+              <li><a href="/supervisorlogin">Supervisor</a></li>
+              <li><a href="/admin">Admin</a></li>
+           
+            </ul>
+          </li>
+
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+
+{% endif %}
+          
+
+  
+<section id="hero">
+  <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" style="background-image: url(../static/assets/img/thaparbuilding3.jpg); background-size: cover;">
+    <div class="container" style="margin-top: 200px;">
+      <div class="row">
+        <!-- Card 1: Aug-Sep (Active) -->
+        <div class="col-md-3">
+          <div class="card active text-center">
+            <div class="card-body">
+              <h5 class="card-title">
+                <ion-icon name="book-outline"></ion-icon>Aug-Sep
+              </h5>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 100%; border: none;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+              </div>
+              <p class="mt-2">100% Complete</p>
+              <a href="/uploadproject" class="btn btn-primary" style="margin-bottom: 10px; background-color: rgb(44, 44, 249); border:none;">Submit Project</a>
+              <!-- <a href="/viewgrades/aug-sep" class="btn btn-secondary mt-2" style="background-color: rgb(44, 44, 249); border: none;">View Grades</a> -->
             </div>
-            
-            <table class="project-table">
-              <thead>
-                <tr>
-                  <th>S.No</th>
-                  <th>Project Domain</th>
-                  <th>Project Name</th>
-                  <th>Project Details</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Artificial Intelligence</td>
-                  <td>AI-Based Image Recognition</td>
-                  <td><a href="/project-details/1">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Machine Learning</td>
-                  <td>Predictive Analytics for Stock Market</td>
-                  <td><a href="/project-details/2">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Blockchain</td>
-                  <td>Secure Voting System</td>
-                  <td><a href="/project-details/3">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>Robotics</td>
-                  <td>Autonomous Drone Navigation</td>
-                  <td><a href="/project-details/4">View Details</a></td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>Electronics</td>
-                  <td>Smart Home Automation System</td>
-                  <td><a href="/project-details/5">View Details</a></td>
-                </tr>
-              </tbody>
-            </table>
-            
+            <ion-icon name="lock-closed-outline" class="lock-icon" size="small" style="position: absolute; top: 10px; right: 10px; color: gray;"></ion-icon> <!-- Hidden lock icon -->
+          </div>
+        </div>
+
+        <!-- Card 2: Oct-Nov (Locked) -->
+        <div class="col-md-3">
+          <div class="card locked text-center">
+            <div class="card-body">
+              <h5 class="card-title" >
+                <ion-icon name="book-outline"></ion-icon>Oct-Nov
+              </h5>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+              </div>
+              <p class="mt-2">0% Complete</p>
+              <a href="#" class="btn btn-secondary" style="margin-bottom: 10px; cursor: not-allowed;">Submit Project</a>
+              <!-- <a href="#" class="btn btn-secondary mt-2" style="cursor: not-allowed;">View Grades</a> -->
+            </div>
+            <ion-icon name="lock-closed-outline" class="lock-icon"></ion-icon> <!-- Visible lock icon -->
+          </div>
+        </div>
+
+        <!-- Card 3: Dec-March (Locked) -->
+        <div class="col-md-3">
+          <div class="card locked text-center">
+            <div class="card-body">
+              <h5 class="card-title">
+                <ion-icon name="book-outline"></ion-icon>Dec-March
+              </h5>
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+              </div>
+              <p class="mt-2">0% Complete</p>
+              <a href="#" class="btn btn-secondary" style="margin-bottom: 10px; cursor: not-allowed;">Submit Project</a>
+              <!-- <a href="#" class="btn btn-secondary mt-2" style="cursor: not-allowed;">View Grades</a> -->
+            </div>
+            <ion-icon name="lock-closed-outline" class="lock-icon"></ion-icon> <!-- Visible lock icon -->
+          </div>
+        </div>
+
+        <!-- Card 4: Apr-Jun (Locked) -->
+        <div class="col-md-3">
+          <div class="card locked text-center">
+            <div class="card-body">
+              <h5 class="card-title">
+                <ion-icon name="book-outline"></ion-icon>Apr-Jun
+              </h5>
+              <div class="progress">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+              </div>
+              <p class="mt-2">0% Complete</p>
+              <a href="#" class="btn btn-secondary" style="margin-bottom: 10px; cursor: not-allowed;">Submit Project</a>
+              <!-- <a href="#" class="btn btn-secondary mt-2" style="cursor: not-allowed;">View Grades</a> -->
+            </div>
+            <ion-icon name="lock-closed-outline" class="lock-icon"></ion-icon> <!-- Visible lock icon -->
           </div>
         </div>
       </div>
     </div>
-  </section><!-- End Hero Section -->
+  </div>
+</section>
+
+
+  
+
+  <!-- End Hero -->
+
+
 
   <main id="main">
-    <!-- Main content here -->
-  </main>
 
-  <footer id="footer">
+    {% block body %}
+    
+    
+    {% endblock body %}
+
+    <footer id="footer">
     <div class="container">
       <div class="copyright">
         &copy; Copyright <strong><span>Thapar University</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        
       </div>
     </div>
   </footer><!-- End Footer -->
@@ -254,15 +272,18 @@
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
+  <script src="/project/static/assets/js/projectscript.js"></script>
+
   <script src="../static/assets/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="../static/assets/vendor/aos/aos.js"></script>
   <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../static/assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="../static/assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="../static/assets/vendor/php-email-form/validate.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-  <!-- Template
- Main JS File -->
+  <!-- Template Main JS File -->
   <script src="../static/assets/js/main.js"></script>
 
 </body>
