@@ -46,44 +46,7 @@
     </div>
   </div>
 
-  {% if current_user.is_authenticated and current_user.sid %}
-
-
-  <header id="header" class="fixed-top">
-    <div class="container d-flex align-items-center">
-
-      <a href="/" class="logo me-auto"><img  src="../static/assets/img/tietlogo.png" alt=""></a>
-
-
-      <nav id="navbar" class="navbar order-last order-lg-0">
-        <ul>
-          <li><a class="nav-link scrollto " href="/">Home</a></li>
-
-        <li class="dropdown">
-          <a href="/login">
-            <span>Welcome {{ current_user.email.split('@')[0] }}</span> 
-            <i class="bi bi-chevron-down"></i>
-          </a>
-          <ul>
-            <li><a href="/changepassword">Change Password</a></li>
-            <li><a href="/supervisorlogout">Logout</a></li>
-          </ul>
-        </li>        
-        <li><a class="nav-link scrollto" href="/supervisormygroup">My Group</a></li>
-        <button class="appointment-btn scrollto"  onclick="window.location.href='/reviewproject'"><span class="d-none d-md-inline">REVIEW PROJECTS </span></button>
-
-        <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-       
-        
-      </ul>
-    </nav>
-    <!-- .navbar -->
-  </div>
-</header><!-- End Header -->
-
-
-
-    {% elif current_user.is_authenticated and current_user.rollno %}
+    {% if current_user.is_authenticated %}
 
 
     <header id="header" class="fixed-top">
@@ -97,19 +60,40 @@
             <li><a class="nav-link scrollto " href="/">Home</a></li>
 
           <li class="dropdown">
-            <a href="/login">
-              <span>Welcome {{ current_user.email.split('@')[0] }}</span> 
+            <a href="/adminlogin">
+              <span>Welcome Admin</span> 
               <i class="bi bi-chevron-down"></i>
             </a>
             <ul>
               <li><a href="/changepassword"> Change Password</a></li>
-              <li><a href="/logout">Logout</a></li>
+              <li><a href="/adminlogout">Logout</a></li>
             </ul>
-          </li>        
+          </li>   
+          
+          <li class="dropdown">
+            <a href="/adminlogin">
+              <span>Student</span> 
+              <i class="bi bi-chevron-down"></i>
+            </a>
+            <ul>
+              <li><a href="/studentdata"> Student Data</a></li>
+              <li><a href="/studentgrades">Student Grades</a></li>
+            </ul>
+          </li>  
 
-          <li><a class="nav-link scrollto" href="/studentmygroup">My Group</a></li>
+          <li class="dropdown">
+            <a href="/adminlogin">
+              <span>Supervisor</span> 
+              <i class="bi bi-chevron-down"></i>
+            </a>
+            <ul>
+              <li><a href="/studentdata"> Supervisor Data</a></li>
+              <li><a href="/studentgrades">Student-Supervisor</a></li>
+            </ul>
+          </li> 
+          
 
-          <button class="appointment-btn scrollto" onclick="window.location.href='/studentprojectportal'"><span class= "d-none d-md-inline">UPLOAD PROJECT </span></button>
+          <button class="appointment-btn scrollto" onclick="window.location.href='/studentprojectportal'"><span class= "d-none d-md-inline">MANAGE PROJECTS </span></button>
 
 
 
@@ -122,48 +106,7 @@
     </div>
   </header><!-- End Header -->
 
-
-  {% elif current_user.is_authenticated and current_user.adminid %}
-
-
-  <header id="header" class="fixed-top">
-    <div class="container d-flex align-items-center">
-
-      <a href="/" class="logo me-auto"><img  src="../static/assets/img/tietlogo.png" alt=""></a>
-
-
-      <nav id="navbar" class="navbar order-last order-lg-0">
-        <ul>
-          <li><a class="nav-link scrollto " href="/">Home</a></li>
-
-        <li class="dropdown">
-          <a href="/adminlogin">
-            <span>Welcome Admin</span> 
-            <i class="bi bi-chevron-down"></i>
-          </a>
-          <ul>
-            <li><a href="/changepassword"> Change Password</a></li>
-            <li><a href="/adminlogout">Logout</a></li>
-          </ul>
-        </li>   
-        
-        <li><a class="nav-link scrollto " href="/studentdata">Student</a></li> 
-        
-        <li><a class="nav-link scrollto " href="/supervisordata">Supervisor</a></li>  
-        
-
-        <button class="appointment-btn scrollto" onclick="window.location.href='/studentprojectportal'"><span class= "d-none d-md-inline">MANAGE PROJECTS </span></button>
-
-
-
-        <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-       
-        
-      </ul>
-    </nav>
-
-  </div>
-</header><!-- End Header -->
+  <!-- ======= Hero Section ======= -->
 
 {% else %}
 

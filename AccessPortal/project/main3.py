@@ -34,14 +34,32 @@ class Supervisor(UserMixin, db.Model):
     
     def get_id(self):
         return str(self.sid)
+    
+class Admin(UserMixin,db.Model):
+    __tablename__ = 'admin'
+    
+    adminid = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
 
-# Load user
+# Load user function for student, supervisor, and admin
 @login_manager.user_loader
 def load_user(user_id):
-    user = Student.query.get(int(user_id))
+    if user_id == "admin":
+        return AdminUser(user_id)
+    user = Student.query.get(user_id)
     if not user:
-        user = Supervisor.query.get(int(user_id))
+        user = Supervisor.query.get(user_id)
     return user
+
+# AdminUser class to handle login
+class AdminUser(UserMixin):
+    def __init__(self, id):
+        self.id = id
 
 # Routes
 @app.route("/")
@@ -164,11 +182,14 @@ def supervisorlogout():
 
 @app.route('/studentprojectportal')
 def projectportal():
+    
     return render_template("studentprojectportal.html")
 
 @app.route('/uploadproject')
 def uploadproject():
+    
     return render_template("uploadproject.html")
+
 
 @app.route('/changepassword', methods=['POST', 'GET'])
 @login_required
@@ -192,8 +213,52 @@ def change_password():
                 flash("New passwords do not match", "danger")
         else:
             flash("Old password is incorrect", "danger")
+    
     return render_template("change_password.html")
 
+# Admin user class for Flask-Login
+class AdminUser(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+# Load user function (for admin only)
+@login_manager.user_loader
+def load_user(user_id):
+    if user_id == "admin":
+        return AdminUser(user_id)
+    return None
+
+# Route for admin login
+@app.route("/adminlogin", methods=['GET', 'POST'])
+def adminlogin():
+    if request.method == "POST":
+        username = request.form.get('admin_id')
+        password = request.form.get('password')
+        
+        # Query the database to find the admin
+        admin = db.session.query(Admin).filter_by(username=username).first()
+        
+        # Check if admin exists and password matches
+        if admin and admin.password == password:
+            admin_user = AdminUser(id=admin.adminid)
+            login_user(admin_user)
+            flash("Admin Login Successful", "success")
+            return render_template("admindashboard.html")
+        else:
+            flash("Invalid Credentials", "danger")
+    return render_template("adminlogin.html")
+
+@app.route('/admindashboard')
+@login_required
+def admin_dashboard():
+    return render_template("admindashboard.html")
+
+@app.route('/adminlogout')
+@login_required
+def admin_logout():
+    logout_user()
+    flash("Admin Logout Successful", "success")
+    return redirect(url_for('adminlogin'))
 
 @app.route('/studentdata')
 @login_required
@@ -206,10 +271,5 @@ def supervisordata():
     return render_template("supervisordata.html")
 
 
-@app.route('/adminlogin')
-def adminlogin():
-    return render_template("adminlogin.html")
-
 if __name__ == "__main__":
     app.run(debug=True)
-

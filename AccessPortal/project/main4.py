@@ -34,13 +34,19 @@ class Supervisor(UserMixin, db.Model):
     
     def get_id(self):
         return str(self.sid)
+    
+class Admin(UserMixin, db.Model):
+    adminid = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))  # Store the hashed password if needed
+
+    def get_id(self):
+        return str(self.adminid)
 
 # Load user
 @login_manager.user_loader
 def load_user(user_id):
-    user = Student.query.get(int(user_id))
-    if not user:
-        user = Supervisor.query.get(int(user_id))
+    user = Student.query.get(user_id) or Supervisor.query.get(user_id) or Admin.query.get(user_id)
     return user
 
 # Routes
@@ -162,6 +168,13 @@ def supervisorlogout():
     flash("Logout SuccessFul", "warning")
     return redirect(url_for('supervisorlogin'))
 
+@app.route('/adminlogout')
+@login_required
+def adminlogout():
+    logout_user()
+    flash("Logout Successful", "warning")
+    return redirect(url_for('adminlogin'))
+
 @app.route('/studentprojectportal')
 def projectportal():
     return render_template("studentprojectportal.html")
@@ -206,9 +219,25 @@ def supervisordata():
     return render_template("supervisordata.html")
 
 
-@app.route('/adminlogin')
+@app.route('/adminlogin', methods=['POST', 'GET'])
 def adminlogin():
+    if request.method == "POST":
+        username = request.form.get('username')  # Get username instead of admin_id
+        password = request.form.get('password')
+        
+        # Validate admin credentials by username
+        admin = Admin.query.filter_by(username=username).first()
+        
+        # Check the password (use check_password_hash if the password is hashed)
+        if admin and admin.password == password:  # Adjust if passwords are hashed
+            login_user(admin, remember=True)
+            flash("Admin Login Success", "info")
+            return render_template("index.html")
+        else:
+            flash("Invalid Admin Credentials", "danger")
+            return render_template("adminlogin.html")
     return render_template("adminlogin.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

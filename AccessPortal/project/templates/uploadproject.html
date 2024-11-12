@@ -41,7 +41,7 @@
       padding-bottom: 20px; /* Adjust padding as needed */
       margin: 0 auto; /* Center the hero section */
       border-top: 4px solid #c95437;
-      margin-bottom: 30px;
+      margin-bottom: 0px;
     }
   
     .upload-project-section {
@@ -89,7 +89,7 @@
   
     /* Specific style for textarea */
     #project-description {
-      height: 100px; /* Adjust the height as needed */
+      height: 50px; /* Adjust the height as needed */
     }
   
     .form-submit {
@@ -111,7 +111,7 @@
     /* Specific style for textarea */
     #project-description {
     width: 100%; /* Adjust as needed for full width */
-    height: 120px; /* Increase the height to make the text box longer */
+    height: 60px; /* Increase the height to make the text box longer */
     padding: 10px; /* Ensure consistent padding */
     box-sizing: border-box; /* Include padding in the element's total width and height */
   }
@@ -154,7 +154,7 @@
               <li><a href="/logout">Logout</a></li>
             </ul>
           </li>
-          <li><a class="nav-link scrollto" href="/trigers">My Group</a></li>
+          <li><a class="nav-link scrollto" href="/studentmygroup">My Group</a></li>
           <li><a class="nav-link scrollto" href="/studentprojectportal">Back ></a></li>
         </ul>
       </nav>
@@ -168,7 +168,7 @@
         <!-- Slide 1 -->
         <div class="carousel-item active" style="background-image: url(../static/assets/img/thaparbuilding3.jpg)">
           <div class="container upload-project-section">
-            <h1 class="upload-project-title">Upload Your Project</h1>
+            <h1 class="upload-project-title">Thesis Report #1</h1>
             <form class="upload-project-form" method="post" action="/submit-project" enctype="multipart/form-data">
 
               <div class="form-field">
@@ -181,9 +181,15 @@
               </div>
 
               <div class="form-field">
-                <label class="field-label" for="project-file">Upload File</label>
-                <input type="file" id="project-file" name="project_file" class="field-input" required>
+                <label class="field-label" for="project-objective">Project Objective</label>
+                <textarea id="project-objective" name="project_objective" class="field-input" required></textarea>
               </div>
+
+              <div class="form-field">
+                <label class="field-label" for="project-work">Work Done</label>
+                <textarea id="project-work" name="project_work" class="field-input" required></textarea>
+              </div>
+          
               <button type="submit" class="form-submit">Submit Project</button>
             </form>
           </div>

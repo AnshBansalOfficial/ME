@@ -1,0 +1,41 @@
+{% extends 'baselogin.html' %}
+{% block title %} Admin Login {% endblock title %}
+{% block form %}
+
+<div class="admin-login" style="position: relative;">
+    <h1>Admin Login</h1>
+
+    <div class="row">
+        <div class="col-md-4"></div>
+
+        <div class="col-md-4">
+            <form action="/adminlogin" method="post">
+                {% include "message.html" %}
+                
+                <!-- Admin ID Input -->
+                <div class="form-group">
+                    <input type="text" class="form-control mt-2" placeholder="Enter the Admin ID" name="username" required style="text-align: center;">
+                    <span class="login-icon11">
+                        <ion-icon name="people-outline"></ion-icon>
+                    </span>
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-group">
+                    <input type="password" class="form-control mt-2" placeholder="Enter the Password" name="password" required style="text-align: center;">
+                    <span class="login-icon12">
+                        <ion-icon name="lock-open-outline"></ion-icon>
+                    </span>
+                </div>
+                
+                <!-- Login Button -->
+                <br>
+                <button type="submit" class="btn btn-info" style="background-color: #9e4a35; color: white; border:none;">Login</button>
+            </form>
+        </div>
+
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+{% endblock form %}
