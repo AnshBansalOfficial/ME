@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  {% if current_user.is_authenticated and current_user.sid %}
+  {% if current_user.is_authenticated and current_user.empcode %}
 
 
   <header id="header" class="fixed-top">
@@ -135,8 +135,6 @@
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
           <li><a class="nav-link scrollto " href="/">Home</a></li>
-
-          <li><a class="nav-link scrollto" href="/pdetails">Details</a></li>
           <li><a class="nav-link scrollto" href="/trigers">Operations</a></li>
 
           <li class="dropdown"><a href="/login"><span>Sign In</span> <i class="bi bi-chevron-down"></i></a>

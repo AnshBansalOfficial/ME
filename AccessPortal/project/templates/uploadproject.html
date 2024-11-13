@@ -169,25 +169,25 @@
         <div class="carousel-item active" style="background-image: url(../static/assets/img/thaparbuilding3.jpg)">
           <div class="container upload-project-section">
             <h1 class="upload-project-title">Thesis Report #1</h1>
-            <form class="upload-project-form" method="post" action="/submit-project" enctype="multipart/form-data">
+            <form class="upload-project-form" method="post" action="/uploadproject" enctype="multipart/form-data">
 
               <div class="form-field">
-                <label class="field-label" for="project-title">Project Title</label>
-                <input type="text" id="project-title" name="project_title" class="field-input" required>
+                <label class="field-label" for="ptitle">Project Title</label>
+                <input type="text" id="ptitle" name="ptitle" class="field-input" required>
               </div>
               <div class="form-field">
-                <label class="field-label" for="project-description">Project Description</label>
-                <textarea id="project-description" name="project_description" class="field-input" required></textarea>
-              </div>
-
-              <div class="form-field">
-                <label class="field-label" for="project-objective">Project Objective</label>
-                <textarea id="project-objective" name="project_objective" class="field-input" required></textarea>
+                <label class="field-label" for="pdesc">Project Description</label>
+                <textarea id="pdesc" name="pdesc" class="field-input" required></textarea>
               </div>
 
               <div class="form-field">
-                <label class="field-label" for="project-work">Work Done</label>
-                <textarea id="project-work" name="project_work" class="field-input" required></textarea>
+                <label class="field-label" for="pobj">Project Objective</label>
+                <textarea id="pobj" name="pobj" class="field-input" required></textarea>
+              </div>
+
+              <div class="form-field">
+                <label class="field-label" for="pwork">Work Done</label>
+                <textarea id="pwork" name="pwork" class="field-input" required></textarea>
               </div>
           
               <button type="submit" class="form-submit">Submit Project</button>

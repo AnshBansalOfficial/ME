@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Review Supervisors</title>
+
+  <title>Upload Project</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -24,64 +25,101 @@
 
   <style>
     #hero {
-      padding: 20px 0;
-      background-size: cover;
-      width: 100%;
-    }
+  padding: 20px 0;
+  background-size: cover;
+  width: 100%; /* Ensure it takes full width */
+}
 
+
+  
     #hero .container {
-      width: 80%;
-      max-width: 1000px;
+      width: 40%; /* Reduce width of the hero container */
+      max-width: 800px; /* Set a maximum width for better control */
       text-align: center;
       background: rgba(255, 255, 255, 0.85);
-      padding-top: 20px;
-      padding-bottom: 20px;
-      margin: 0 auto;
+      padding-top: 20px; /* Adjust padding as needed */
+      padding-bottom: 20px; /* Adjust padding as needed */
+      margin: 0 auto; /* Center the hero section */
       border-top: 4px solid #c95437;
+      margin-bottom: 70px;
     }
-
-    .table-container {
-      margin-top: 20px;
-      padding: 20px;
+  
+    .upload-project-section {
       background-color: #f8f9fa;
+      padding: 20px; /* Reduce padding for a smaller form section */
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
-    .table-title {
-      font-size: 2rem;
+  
+    .upload-project-title {
+      font-size: 2rem; /* Adjust font size to fit the smaller section */
       margin-bottom: 20px;
       color: #333;
+      text-align: center;
     }
-
-    .supervisor-table {
+  
+    .upload-project-form {
+      max-width: 500px; /* Reduce max width of the form */
+      margin: 0 auto;
+    }
+  
+    .form-field {
+      margin-bottom: 20px;
+      width: 100%; /* Ensure form field takes full width of its container */
+      
+    }
+  
+    .field-label {
+      display: block;
+      font-size: 1rem; /* Adjust font size */
+      margin-bottom: 0px;
+      margin-top:-10px;
+      color: #333;
+    }
+  
+    .field-input {
       width: 100%;
-      border-collapse: collapse;
-    }
-
-    .supervisor-table th, .supervisor-table td {
+      padding: 10px; /* Adjust padding */
       border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
+      border-radius: 4px;
+      font-size: 0.9rem; /* Adjust font size */
+      display: inline-block;
+      margin: 0 auto; /* Center horizontally */
+    }
+  
+    /* Specific style for textarea */
+    #project-description {
+      height: 50px; /* Adjust the height as needed */
+    }
+  
+    .form-submit {
+      background-color: #801b02;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 15px; /* Adjust padding */
+      cursor: pointer;
+      font-size: 0.9rem; /* Adjust font size */
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+  
+    .form-submit:hover {
+      background-color: #600a01;
     }
 
-    .supervisor-table th {
-      background-color: #f2f2f2;
-    }
+    /* Specific style for textarea */
+    #project-description {
+    width: 100%; /* Adjust as needed for full width */
+    height: 60px; /* Increase the height to make the text box longer */
+    padding: 10px; /* Ensure consistent padding */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+  }
 
-    .supervisor-table tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
 
-    .supervisor-table a {
-      color: #007bff;
-      text-decoration: none;
-    }
 
-    .supervisor-table a:hover {
-      text-decoration: underline;
-    }
   </style>
+  
 
 </head>
 
@@ -108,17 +146,16 @@
           <li><a class="nav-link scrollto" href="/">Home</a></li>
           <li class="dropdown">
             <a href="/login">
-              <span>Welcome {{ current_user.email.split('@')[0] }}</span> 
+              <span>Welcome {{ current_user.email.split('@')[0] }}</span>
               <i class="bi bi-chevron-down"></i>
             </a>
             <ul>
-              <li><a href="/changepassword">Change Password</a></li>
+              <li><a href="/slotbooking">Profile</a></li>
               <li><a href="/logout">Logout</a></li>
             </ul>
           </li>
-          <li><a class="nav-link scrollto" href="/studentmygroup">My Groups</a></li>
-          <button class="appointment-btn scrollto" onclick="window.location.href='/studentprojectportal'"><span class="d-none d-md-inline">UPLOAD PROJECT </span></button>
-          <button class="appointment-btn scrollto" onclick="window.location.href='/viewfeedbackportal'"><span class= "d-none d-md-inline">VIEW FEEDBACK </span></button>
+          <li><a class="nav-link scrollto" href="/studentmygroup">My Group</a></li>
+          <li><a class="nav-link scrollto" href="/studentprojectportal">Back ></a></li>
         </ul>
       </nav>
     </div>
@@ -130,38 +167,29 @@
       <div class="carousel-inner" role="listbox">
         <!-- Slide 1 -->
         <div class="carousel-item active" style="background-image: url(../static/assets/img/thaparbuilding3.jpg)">
-          <div class="container" style="margin-bottom: 140px;">
-            <h1 class="upload-project-title">STUDENT SUPERVISORS</h1>
-            
-            <div class="table-container">
-              <table class="supervisor-table">
-                <thead>
-                  <tr>
-                    <th>Roll No</th>
-                    <th>Name</th>
-                    <th>Thapar Email ID</th>
-                    <th>Contact No</th>
-                    <th>Supervisor 1</th>
-                    <th>Supervisor 2</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Loop through the student and supervisor data -->
-                  <tr>
-                    <td>{{ student.rollno }}</td>
-                    <td>{{ student.name }}</td>
-                    <td>{{ student.email }}</td>
-                    <td>{{ student.phone }}</td>
-                    <td>{{ supervisor1.name if supervisor1 else "N/A" }}</td>
-                    <td>{{ supervisor2.name if supervisor2 else "N/A" }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            
+          <div class="container upload-project-section">
+            <h1 class="upload-project-title">Grade Project</h1>
+            <br>
+            <form class="upload-project-form" method="post" action="/grade" enctype="multipart/form-data">
+
+              <div class="form-field">
+                <label class="field-label" for="pgrade">Project Grade (5)</label>
+                <input type="text" id="pgrade" name="pgrade" class="field-input" required>
+              </div>
+              <div class="form-field">
+                <label class="field-label" for="pfeedback">Project Feedback</label>
+                <textarea id="pfeedback" name="pfeedback" class="field-input" required></textarea>
+              </div>
+              <button type="submit" class="form-submit">Grade Project</button>
+            </form>
           </div>
         </div>
+
+
+        
+        <!-- Add more slides here if needed -->
       </div>
+      
     </div>
   </section><!-- End Hero Section -->
 

@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  {% if current_user.is_authenticated and current_user.sid %}
+  {% if current_user.is_authenticated and current_user.empcode %}
 
 
   <header id="header" class="fixed-top">
@@ -69,7 +69,7 @@
             <li><a href="/supervisorlogout">Logout</a></li>
           </ul>
         </li>        
-
+        <li><a class="nav-link scrollto" href="/supervisormygroup">My Group</a></li>
         <button class="appointment-btn scrollto"  onclick="window.location.href='/reviewproject'"><span class="d-none d-md-inline">REVIEW PROJECTS </span></button>
        
         
@@ -171,14 +171,38 @@
                 <ion-icon name="book-outline"></ion-icon>Aug-Sep
               </h5>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: 100%; border: none;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                <div class="progress-bar" role="progressbar" style="width: 0%; border: none;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
               </div>
-              <p class="mt-2">100% Complete</p>
-              <a href="/uploadproject" class="btn btn-primary" style="margin-bottom: 10px; background-color: rgb(46, 46, 162); border:none;">Review Project</a>
-              <a href="/gradefeedback/aug-sep" class="btn btn-secondary mt-2" style="background-color: #7e3725; border: none;">Grade Project</a>
+              <p class="mt-2">0% Complete</p>
+
+              {% if not pid %}
+
+              <br>
+              <p class="mt-2">No Submissions</p>
+
+              {% else %}
+              <a href="/viewproject" class="btn btn-secondary" style="margin-bottom: 10px; background-color: rgb(46, 46, 162); border:none;">   
+              Review Project
+              </a>
+              <a href="/grade" class="btn btn-secondary mt-2"
+
+              {% if feedback_locked[0] %}
+              style="background-color: #6c757d; /* Color for locked card */
+              cursor: not-allowed; border:none;"
+              {% else %}
+              style="background-color: #7e3725; border: none;"
+              {% endif %}> 
+
+              {% if feedback_locked[0] %}
+              Graded
+              {% else %}
+              Grade Project
+              {% endif %}
+              </a>  
+              {% endif %}
             </div>
             <ion-icon name="lock-closed-outline" class="lock-icon" size="small" style="position: absolute; top: 10px; right: 10px; color: gray;"></ion-icon> <!-- Hidden lock icon -->
-          </div>
+          </div>  
         </div>
 
         <!-- Card 2: Oct-Nov (Locked) -->
@@ -192,7 +216,7 @@
                 <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
               </div>
               <p class="mt-2">0% Complete</p>
-              <a href="#" class="btn btn-secondary" style="margin-bottom: 10px; cursor: not-allowed;">Submit Project</a>
+              <a href="#" class="btn btn-secondary" style="margin-bottom: 10px; cursor: not-allowed;">Review Project</a>
               <a href="#" class="btn btn-secondary mt-2" style="cursor: not-allowed;">Grade Project</a>
             </div>
             <ion-icon name="lock-closed-outline" class="lock-icon"></ion-icon> <!-- Visible lock icon -->
@@ -210,7 +234,7 @@
                 <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
               </div>
               <p class="mt-2">0% Complete</p>
-              <a href="#" class="btn btn-secondary" style="margin-bottom: 10px; cursor: not-allowed;">Submit Project</a>
+              <a href="#" class="btn btn-secondary" style="margin-bottom: 10px; cursor: not-allowed;">Review Project</a>
               <a href="#" class="btn btn-secondary mt-2" style="cursor: not-allowed;">Grade Project</a>
             </div>
             <ion-icon name="lock-closed-outline" class="lock-icon"></ion-icon> <!-- Visible lock icon -->
@@ -228,7 +252,7 @@
                 <div class="progress-bar bg-danger" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
               </div>
               <p class="mt-2">0% Complete</p>
-              <a href="#" class="btn btn-secondary" style="margin-bottom: 10px; cursor: not-allowed;">Submit Project</a>
+              <a href="#" class="btn btn-secondary" style="margin-bottom: 10px; cursor: not-allowed;">Review Project</a>
               <a href="#" class="btn btn-secondary mt-2" style="cursor: not-allowed;">Grade Project</a>
             </div>
             <ion-icon name="lock-closed-outline" class="lock-icon"></ion-icon> <!-- Visible lock icon -->

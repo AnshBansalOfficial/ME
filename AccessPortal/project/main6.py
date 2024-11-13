@@ -322,12 +322,89 @@ def upload_project():
     return render_template("uploadproject.html")
 
 
-# Review project routes
-@app.route('/reviewproject')
+@app.route('/reviewproject', methods=['POST', 'GET'])
 @login_required
 def review_project():
+    # Ensure only supervisors can access this route
+    if isinstance(current_user, Supervisor1):
+        # Get the supervisor ID from the current user (assuming it's stored in the Supervisor1 model)
+        supervisor_id = current_user.empcode  # Modify based on your actual model
+        print(f"Supervisor ID: {supervisor_id}")  # Debugging line to check the supervisor's ID
+
+        # Step 1: Get roll numbers of the students assigned to this supervisor from the map1 table
+        assigned_students = db.session.query(Map1.rollno, Map1.empcode1, Map1.empcode2).filter(
+            (Map1.empcode1 == supervisor_id) | (Map1.empcode2 == supervisor_id)
+        ).all()
+        print(f"Assigned Students: {assigned_students}")  # Debugging line to check assigned students
+
+        # Step 2: Fetch the project IDs (pid) assigned to the students from the projectmap1 table
+        student_project_ids = []
+        for student in assigned_students:
+            roll_no, empcode1, empcode2 = student  # Unpack the tuple to get rollno, empcode1, and empcode2
+            print(f"Fetching projects for student with roll_no: {roll_no}")  # Debugging line to check current student
+            projects = db.session.query(ProjectMap1.pid).filter(ProjectMap1.rollno == roll_no).all()
+            print(f"Projects for student {roll_no}: {projects}")  # Debugging line to check projects for each student
+            student_project_ids.extend([project[0] for project in projects])  # Extract the pid from the result
+
+        # Debugging line to print the final list of project IDs
+        print(f"Final Project IDs: {student_project_ids}")
+
+        # Initialize feedback_locked as an empty list
+        feedback_locked = []
+
+        # Step 3: Check if the feedback1 or feedback2 is already given by the supervisor for any project
+        for pid in student_project_ids:
+            grade_entry = GradeProject1.query.filter_by(pid=pid).first()
+            if grade_entry:
+                # Check which feedback field corresponds to the supervisor
+                if supervisor_id == empcode1 and grade_entry.feedback1:
+                    feedback_locked.append(True)  # Feedback1 is locked
+                elif supervisor_id == empcode2 and grade_entry.feedback2:
+                    feedback_locked.append(True)  # Feedback2 is locked
+                else:
+                    feedback_locked.append(False)  # Feedback is not locked
+            else:
+                feedback_locked.append(False)  # If no grade entry, it's not locked
+        print(feedback_locked)
+
+        # Return to template, passing student_project_ids and feedback_locked
+        return render_template("gradeproject.html", pid=student_project_ids, feedback_locked=feedback_locked)
     
-    return render_template("gradeproject.html")
+    else:
+        flash("Only supervisors can grade projects.", "danger")
+        return redirect(url_for('home'))
+    
+
+@app.route('/viewproject')
+@login_required
+def viewproject():
+    if isinstance(current_user, Supervisor1):
+    # Get the supervisor ID
+        supervisor_id = current_user.empcode
+        print(f"Supervisor ID: {supervisor_id}")  # Debug output to confirm supervisor's ID
+
+        # Step 1: Get roll numbers of students assigned to this supervisor from the Map1 table
+        assigned_students = db.session.query(Map1.rollno).filter(
+            (Map1.empcode1 == supervisor_id) | (Map1.empcode2 == supervisor_id)
+        ).all()
+        print(f"Assigned Students Roll Numbers: {[student.rollno for student in assigned_students]}")  # Debug output
+
+        # Step 2: Retrieve project IDs (pid) assigned to the students from the ProjectMap1 table
+        student_project_ids = []
+        for student in assigned_students:
+            roll_no = student.rollno
+            projects = db.session.query(ProjectMap1.pid).filter(ProjectMap1.rollno == roll_no).all()
+            student_project_ids.extend([project[0] for project in projects])
+
+        print(f"Student Project IDs: {student_project_ids}")  # Debug output to confirm project IDs
+
+        # Step 3: Retrieve project details from the Project1 table using the collected project IDs
+        projects = db.session.query(Project1).filter(Project1.pid.in_(student_project_ids)).all()
+
+        # Step 4: Pass the project details to the template
+        return render_template("viewproject.html", projects=projects)
+
+
 
 @app.route('/adminlogin', methods=['POST', 'GET'])
 def adminlogin():
@@ -348,6 +425,171 @@ def adminlogin():
             return render_template("adminlogin.html")
     return render_template("adminlogin.html")
 
+@app.route('/grade', methods=['GET', 'POST'])
+@login_required
+def grade_project():
+    # Ensure the user is logged in and has the necessary permissions
+    if request.method == 'POST':
+        # Retrieve form data
+        pgrade = request.form['pgrade']
+        pfeedback = request.form['pfeedback']
+        
+        # Validate inputs (example: grade should be an integer)
+        try:
+            pgrade = int(pgrade)
+        except ValueError:
+            flash("Invalid grade. Please enter a valid number.", "danger")
+            return redirect(url_for('grade_project'))
+        
+        if pgrade < 0 or pgrade > 5:
+            flash("Grade should be between 0 and 5.", "danger")
+            return redirect(url_for('grade_project'))
+
+        if isinstance(current_user, Supervisor1):
+            # Get the supervisor ID from the current user (assuming it's stored in the Supervisor1 model)
+            supervisor_id = current_user.empcode  # Modify based on your actual model
+            print(f"Supervisor ID: {supervisor_id}")  # Debugging line to check the supervisor's ID
+
+            # Step 1: Get roll numbers of the students assigned to this supervisor from the map1 table
+            assigned_students = db.session.query(Map1.rollno, Map1.empcode1, Map1.empcode2).filter(
+                (Map1.empcode1 == supervisor_id) | (Map1.empcode2 == supervisor_id)
+            ).all()
+            print(f"Assigned Students: {assigned_students}")  # Debugging line to check assigned students
+
+            # Step 2: Fetch the project IDs (pid) assigned to the students from the projectmap1 table
+            student_project_ids = []
+            for student in assigned_students:
+                roll_no = student.rollno
+                print(f"Fetching projects for student with roll_no: {roll_no}")  # Debugging line to check current student
+                projects = db.session.query(ProjectMap1.pid).filter(ProjectMap1.rollno == roll_no).all()
+                print(f"Projects for student {roll_no}: {projects}")  # Debugging line to check projects for each student
+                student_project_ids.extend([project[0] for project in projects])  # Extract the pid from the result
+            pid = student_project_ids[0] if student_project_ids else None  # Ensure pid is available
+
+            # If no projects found, show an error message
+            if pid is None:
+                flash("No projects found for the assigned students.", "danger")
+                return redirect(url_for('student_project_portal'))
+
+        # Fetch the project using pid, ensure it exists
+        project = Project1.query.filter_by(pid=pid).first()
+        if not project:
+            flash("Project not found.", "danger")
+            return redirect(url_for('student_project_portal'))  # Redirect to a valid page
+
+        # Check if the project has already been graded
+        grade_entry = GradeProject1.query.filter_by(pid=pid).first()
+
+        # Determine which feedback field to update based on the supervisor's position in Map1
+        feedback_field = None
+        for student in assigned_students:
+            if student.empcode1 == supervisor_id:
+                feedback_field = 'feedback1'
+                break
+            elif student.empcode2 == supervisor_id:
+                feedback_field = 'feedback2'
+                break
+        
+        if not feedback_field:
+            flash("Supervisor does not match the assigned student's roles.", "danger")
+            return redirect(url_for('student_project_portal'))
+
+        # Update or create the grade entry
+        if grade_entry:
+            # When the grade entry exists, retain feedback1 if it's already set and update feedback2
+            if grade_entry.marks is not None:
+                # If marks already exist, don't update them
+                if feedback_field == 'feedback1':
+                    if not grade_entry.feedback1:
+                        grade_entry.feedback1 = pfeedback
+                elif feedback_field == 'feedback2':
+                    if not grade_entry.feedback2:
+                        grade_entry.feedback2 = pfeedback
+            else:
+                # If marks do not exist, set them along with feedback
+                grade_entry.marks = pgrade
+                if feedback_field == 'feedback1':
+                    grade_entry.feedback1 = pfeedback
+                    grade_entry.feedback2 = ""  # Ensure feedback2 is set to an empty string if not used
+                elif feedback_field == 'feedback2':
+                    grade_entry.feedback2 = pfeedback
+                    grade_entry.feedback1 = ""  # Ensure feedback1 is set to an empty string if not used
+        else:
+            # If the entry does not exist, create a new one with the appropriate feedback field
+            grade_entry = GradeProject1(pid=pid, marks=pgrade)
+
+            # Set feedback fields, ensure that the other feedback is set to an empty string
+            if feedback_field == 'feedback1':
+                grade_entry.feedback1 = pfeedback
+                grade_entry.feedback2 = ""  # Ensure feedback2 is set to an empty string if not used
+            elif feedback_field == 'feedback2':
+                grade_entry.feedback2 = pfeedback
+                grade_entry.feedback1 = ""  # Ensure feedback1 is set to an empty string if not used
+
+            db.session.add(grade_entry)
+
+        # Commit the transaction
+        db.session.commit()
+        
+        flash("Project graded successfully!", "success")
+        return redirect(url_for('review_project'))  # Redirect to another page
+
+    # Handle GET request (rendering the form)
+    return render_template('grade.html')  # Assuming the grade.html is set correctly in your templates folder
+
+
+@app.route('/viewfeedbackportal', methods=['GET', 'POST'])
+@login_required
+def view_feedback_portal():
+    # Initialize variables
+    pid = None
+    feedback1 = None
+    feedback2 = None
+
+    # Check if the current user is a student
+    if isinstance(current_user, Student1):
+        # Look for a project associated with the current student's roll number
+        project_map = ProjectMap1.query.filter_by(rollno=current_user.rollno).first()
+        
+        if project_map:
+            pid = project_map.pid  # Get the PID from the project map table
+            
+            # Retrieve feedback based on the PID if it exists in GradeProject1
+            grade_project = GradeProject1.query.filter_by(pid=pid).first()
+            if grade_project:
+                feedback1 = grade_project.feedback1  # Feedback from supervisor 1
+                feedback2 = grade_project.feedback2  # Feedback from supervisor 2
+        else:
+            pid = None  # No project associated with the student
+    # Pass pid, feedback1, and feedback2 to the template
+    return render_template("viewfeedbackportal.html", pid=pid, feedback1=feedback1, feedback2=feedback2)
+
+
+@app.route('/viewfeedback', methods=['GET', 'POST'])
+@login_required
+def view_feedback():
+    # Initialize variables
+    pid = None
+    feedback1 = None
+    feedback2 = None
+
+    # Check if the current user is a student
+    if isinstance(current_user, Student1):
+        # Look for a project associated with the current student's roll number
+        project_map = ProjectMap1.query.filter_by(rollno=current_user.rollno).first()
+        
+        if project_map:
+            pid = project_map.pid  # Get the PID from the project map table
+            
+            # Retrieve feedback based on the PID if it exists in GradeProject1
+            grade_project = GradeProject1.query.filter_by(pid=pid).first()
+            if grade_project:
+                feedback1 = grade_project.feedback1  # Feedback from supervisor 1
+                feedback2 = grade_project.feedback2  # Feedback from supervisor 2
+        else:
+            pid = None  # No project associated with the student
+    # Pass pid, feedback1, and feedback2 to the template
+    return render_template("viewfeedback.html", pid=pid, feedback1=feedback1, feedback2=feedback2)
 # Run the app
 if __name__ == "__main__":
     app.run(debug=True)

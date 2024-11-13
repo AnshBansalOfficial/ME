@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  {% if current_user.is_authenticated and current_user.sid %}
+  {% if current_user.is_authenticated and current_user.empcode %}
 
 
   <header id="header" class="fixed-top">
@@ -110,7 +110,7 @@
           <li><a class="nav-link scrollto" href="/studentmygroup">My Group</a></li>
 
           <button class="appointment-btn scrollto" onclick="window.location.href='/studentprojectportal'"><span class= "d-none d-md-inline">UPLOAD PROJECT </span></button>
-
+          <button class="appointment-btn scrollto" onclick="window.location.href='/viewfeedbackportal'"><span class= "d-none d-md-inline">VIEW FEEDBACK </span></button>
 
 
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>

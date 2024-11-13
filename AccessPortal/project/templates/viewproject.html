@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Review Supervisors</title>
+
+  <title>Upload Project</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -30,57 +31,123 @@
     }
 
     #hero .container {
-      width: 80%;
-      max-width: 1000px;
+      width: 40%;
+      max-width: 800px;
       text-align: center;
       background: rgba(255, 255, 255, 0.85);
       padding-top: 20px;
       padding-bottom: 20px;
       margin: 0 auto;
       border-top: 4px solid #c95437;
+      margin-bottom: 0px;
     }
-
-    .table-container {
-      margin-top: 20px;
-      padding: 20px;
+  
+    .upload-project-section {
       background-color: #f8f9fa;
+      padding: 20px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
-    .table-title {
+  
+    .upload-project-title {
       font-size: 2rem;
       margin-bottom: 20px;
       color: #333;
+      text-align: center;
     }
-
-    .supervisor-table {
+  
+    .upload-project-form {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  
+    .form-field {
+      margin-bottom: 20px;
       width: 100%;
-      border-collapse: collapse;
     }
-
-    .supervisor-table th, .supervisor-table td {
-      border: 1px solid #ddd;
+  
+    .field-label {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 0px;
+      margin-top:-10px;
+      color: #333;
+    }
+  
+    .field-input {
+      width: 100%;
       padding: 10px;
-      text-align: left;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      display: inline-block;
+      margin: 0 auto;
+    }
+  
+    #project-description {
+      height: 50px;
     }
 
-    .supervisor-table th {
-      background-color: #f2f2f2;
+    .form-submit {
+      background-color: #801b02;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 15px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+  
+    .form-submit:hover {
+      background-color: #600a01;
     }
 
-    .supervisor-table tr:nth-child(even) {
-      background-color: #f9f9f9;
+    #project-description {
+      width: 100%;
+      height: 60px;
+      padding: 10px;
+      box-sizing: border-box;
     }
 
-    .supervisor-table a {
-      color: #007bff;
-      text-decoration: none;
+    .project-title {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 20px;
     }
 
-    .supervisor-table a:hover {
-      text-decoration: underline;
+    .project-card {
+      background: #f1f1f1; /* Slight greyish background */
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
     }
+
+    .project-card h4 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .project-card p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .project-card .partition {
+      border-bottom: 1px solid #ddd;
+      margin: 10px 0;
+      padding-bottom: 10px;
+    }
+
+    .project-card .title-label {
+      font-weight: bold;
+    }
+
   </style>
 
 </head>
@@ -108,7 +175,7 @@
           <li><a class="nav-link scrollto" href="/">Home</a></li>
           <li class="dropdown">
             <a href="/login">
-              <span>Welcome {{ current_user.email.split('@')[0] }}</span> 
+              <span>Welcome {{ current_user.email.split('@')[0] }}</span>
               <i class="bi bi-chevron-down"></i>
             </a>
             <ul>
@@ -116,9 +183,8 @@
               <li><a href="/logout">Logout</a></li>
             </ul>
           </li>
-          <li><a class="nav-link scrollto" href="/studentmygroup">My Groups</a></li>
-          <button class="appointment-btn scrollto" onclick="window.location.href='/studentprojectportal'"><span class="d-none d-md-inline">UPLOAD PROJECT </span></button>
-          <button class="appointment-btn scrollto" onclick="window.location.href='/viewfeedbackportal'"><span class= "d-none d-md-inline">VIEW FEEDBACK </span></button>
+          <li><a class="nav-link scrollto" href="/studentmygroup">My Group</a></li>
+          <li><a class="nav-link scrollto" href="/viewfeedbackportal">Back ></a></li>
         </ul>
       </nav>
     </div>
@@ -130,35 +196,24 @@
       <div class="carousel-inner" role="listbox">
         <!-- Slide 1 -->
         <div class="carousel-item active" style="background-image: url(../static/assets/img/thaparbuilding3.jpg)">
-          <div class="container" style="margin-bottom: 140px;">
-            <h1 class="upload-project-title">STUDENT SUPERVISORS</h1>
+          <div class="container my-5">
+            {% for project in projects %}
+              <div class="project-card">
+                <div class="partition">
+                    <h4 class="title-label">Title: {{ project.ptitle }}</h4>
+                </div>
             
-            <div class="table-container">
-              <table class="supervisor-table">
-                <thead>
-                  <tr>
-                    <th>Roll No</th>
-                    <th>Name</th>
-                    <th>Thapar Email ID</th>
-                    <th>Contact No</th>
-                    <th>Supervisor 1</th>
-                    <th>Supervisor 2</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Loop through the student and supervisor data -->
-                  <tr>
-                    <td>{{ student.rollno }}</td>
-                    <td>{{ student.name }}</td>
-                    <td>{{ student.email }}</td>
-                    <td>{{ student.phone }}</td>
-                    <td>{{ supervisor1.name if supervisor1 else "N/A" }}</td>
-                    <td>{{ supervisor2.name if supervisor2 else "N/A" }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            
+                <div class="partition">
+                  <p><strong>Description:</strong> {{ project.pdesc }}</p>
+                </div>
+                <div class="partition">
+                  <p><strong>Objective:</strong> {{ project.pobj }}</p>
+                </div>
+                <div class="partition">
+                  <p><strong>Work Done:</strong> {{ project.pwork }}</p>
+                </div>
+              </div>
+            {% endfor %}
           </div>
         </div>
       </div>
