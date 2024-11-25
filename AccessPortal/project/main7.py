@@ -743,6 +743,50 @@ def adminviewgrades():
     # Render the template with data
     return render_template('adminviewgrades.html', data=grade_data)
 
+
+@app.route('/addmap', methods=['GET', 'POST'])
+def addmap():
+    if request.method == 'POST':
+        rollno = request.form.get('rollno')
+        empcode1 = request.form.get('empcode1')
+        empcode2 = request.form.get('empcode2')
+
+        # Check if roll number and empcodes exist in the database
+        student = Student1.query.filter_by(rollno=rollno).first()
+        supervisor1 = Supervisor1.query.filter_by(empcode=empcode1).first()
+        supervisor2 = Supervisor1.query.filter_by(empcode=empcode2).first()
+
+        if not student:
+            flash(f"Student with Roll Number {rollno} does not exist.", "error")
+            return redirect(url_for('addmap'))
+        if not supervisor1:
+            flash(f"Supervisor with Empcode {empcode1} does not exist.", "error")
+            return redirect(url_for('addmap'))
+        if not supervisor2:
+            flash(f"Supervisor with Empcode {empcode2} does not exist.", "error")
+            return redirect(url_for('addmap'))
+
+        # Check if mapping already exists
+        existing_mapping = Map1.query.filter_by(rollno=rollno).first()
+        if existing_mapping:
+            flash(f"Mapping for Roll Number {rollno} already exists.", "error")
+            return redirect(url_for('addmap'))
+
+        # Add new mapping to the database
+        new_mapping = Map1(rollno=rollno, empcode1=empcode1, empcode2=empcode2)
+        db.session.add(new_mapping)
+        db.session.commit()
+
+        flash(f"Mapping for Roll Number {rollno} added successfully.", "success")
+        return redirect(url_for('viewmap'))
+
+    # Render the HTML form
+    return render_template('addmap.html')
+
+@app.route('/manageprojects')
+def manageprojects():
+    return render_template('manageprojects.html')
+
 # Run the app
 if __name__ == "__main__":
     app.run(debug=True)
